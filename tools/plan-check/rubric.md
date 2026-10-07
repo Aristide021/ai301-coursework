@@ -1,0 +1,31 @@
+# Rubric: is this plan ready to post and build from?
+
+A ready plan follows from the reproduced behavior, limits itself to one
+reviewable change, gives another contributor enough direction to begin, and
+names an observable way to tell whether the change worked. It also meets the
+direction already present in the issue thread and the repository's stated
+rules for comments.
+
+## Checks
+
+| Check | Evidence | Pass condition | Weight |
+|---|---|---|---|
+| diagnosis-grounded | The plan's diagnosis and proposed fix site, read against the repro-evidence block's target run, controls, and boundary statements, plus any cause or fix direction in the issue context and thread highlights | The diagnosis explains the reproduced failure without contradicting any shown control or placing the defect after evidence shows the information was already lost. The proposed fix acts at a layer that can produce the shown behavior. A diagnosis may remain a bounded hypothesis when the evidence has not isolated the exact function, but the plan must label that uncertainty and choose an investigation step that can resolve it before editing. Fail when a control rules the diagnosis out, when the plan ignores the evidence's isolated layer, or when it states an untested cause as settled fact. | required |
+| scope-bounded | The plan's in-scope and out-of-scope statements, named files or areas, approach, risks, and the plan comment, read against the issue's requested behavior and the thread's settled direction | The plan describes one coherent, reviewable fix for the reproduced issue. Supporting tests and the smallest necessary plumbing are in scope; unrelated migrations, new options, UI work, cross-component redesigns, broad dependency upgrades, and "while here" cleanup are excluded unless the issue or a maintainer explicitly requires them for this fix. A deliberate scoped-down choice passes when the plan states what is deferred and why. Fail when the issue fix is bundled into a larger campaign or redesign, even if the core fix is sound. | required |
+| approach-executable | The plan's files or code areas and ordered approach, read against the diagnosis, thread highlights, and repo facts | A stranger can identify where to start, what behavior to change, and the main implementation decision without asking the author to choose the layer, strategy, or target during the build. Exact line numbers are unnecessary and an honestly named low-level uncertainty may remain when the plan gives a concrete tracing step and a bounded decision rule. Fail when the plan is primarily "investigate," "profile," "fix whatever is found," offers several incompatible approaches without choosing, or defers the repository versus upstream location to build time. | required |
+| test-decisive | The plan's test plan, read against the repro-evidence block's commands, inputs, controls, actual result, and expected result | The test plan re-runs or faithfully converts the reproduced trigger through the real changed code and states an observable post-fix outcome: specific output, exit status, state transition, artifact, timing threshold, or absence of the reproduced failure. It preserves a relevant control or regression assertion where needed to distinguish the fix from setup success. A broad suite may supplement this but cannot replace it. Fail when success is only "tests pass," "looks better," "feels fast," or "does not break anything." | required |
+| uncertainty-honest | The plan's diagnosis, risks, unknowns, deferrals, and deviations, read against gaps and limits in the repro evidence and thread | Claims do not exceed the evidence. Material unknowns that could move the fix site, affect another platform, or change the chosen trade-off are named with a bounded way to resolve or contain them. A plan need not manufacture risks when none are apparent. Fail when a known evidence boundary is presented as certainty, an untestable variant is silently claimed, or a material implementation choice is hidden behind confident language. | required |
+| thread-aligned | The candidate plan comment and plan, read against the issue context and every thread highlight that gives maintainer direction, identifies prior work, rejects an approach, asks for testing, or marks behavior as intended | The comment engages the thread's material direction: it follows or explicitly discusses a maintainer's requested fix or test, acknowledges active or prior competing work, and does not substitute a workaround or different deliverable after the thread has asked for a code fix. Disagreement may pass when it is explicit, evidence-based, and asks for maintainer confirmation before building. No material thread direction means this check passes. | required |
+| conventions-respected | The repo-facts block's contribution-policy and template statements, read against the candidate plan comment | The comment satisfies requirements the repository states for issue comments. Read scope before content: a disclosure duty limited to pull requests does not govern an issue comment, while a policy covering all AI use or AI-assisted comments requires the stated disclosure here. A human-voice-only rule is satisfied by a specific comment written in the contributor's own words. Silence in repo facts imposes no extra requirement. Fail when a stated comment-level disclosure or participation rule is unmet. | required |
+| regression-awareness | The approach, risks, and test plan, read against the affected behavior and any control cases in the repro evidence | The plan names at least one nearby behavior that must remain unchanged when the change could plausibly disturb it, or explains through its narrow scope why the reproduced post-fix assertion is sufficient. This distinguishes an isolated fix from one that merely makes the failing example pass. | preferred |
+
+## Verdict rule
+
+`accept` when every required check is `pass`. Any required `fail` produces
+`reject`.
+
+`unclear` means the named evidence is absent or cannot decide the check; it is
+not an established failure. An `unclear` grade on a required check counts as a
+hold and therefore produces `reject` for insufficient evidence. Preferred
+checks never change the verdict, whether they pass, fail, or are unclear.
+
